@@ -15,7 +15,8 @@ async function watchVideo() {
       console.log('Exiting video');
       return;
     }
-    console.log('video stream errored', err);
+    console.log('video stream errored');
+    console.error(err);
   }
 
   console.log('Video - restart in 1s');

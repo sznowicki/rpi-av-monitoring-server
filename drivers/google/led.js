@@ -31,7 +31,10 @@ class Led {
   }
 
   resetBrightness() {
-    this.setBrightness(DEFAULT_BRIGHTNESS)
+    this.on();
+    this.setBrightness(DEFAULT_BRIGHTNESS);
+
+    return this;
   }
 
   async pulse(times) {
