@@ -1,12 +1,9 @@
 const { exec } = require('child_process');
 
-function start({ directory }) {
+function start() {
   return new Promise((resolve, reject) => {
     exec(
-      `${directory}/mjpg_streamer -o "output_http.so -w ./www" -i "input_raspicam.so"`,
-      {
-        cwd: directory,
-      },
+      `darkice -c ~/.darkice-s2ip.cfg`,
       (error, stdout, stderr) => {
         if (error) {
           console.log('ERROR', error);
@@ -25,14 +22,13 @@ function start({ directory }) {
         return resolve(stdout);
       }
     )
-  })
+  });
 }
 
 function stop() {
-  exec('killall mjpg_streamer');
+  exec('killall darkice');
 }
-
 module.exports = {
   start,
-  stop,
+  stop
 };

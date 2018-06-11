@@ -1,7 +1,8 @@
-//const Gpio = require('onoff').Gpio;
 const mjpeg = require('./mjpeg-stream');
+const audio = require('./darkice');
 const sleep = require('./helpers/sleep');
-async function watchStream() {
+
+async function watchVideo() {
   try {
     const directory = '/home/pi/stream/mjpg-streamer/mjpg-streamer-experimental';
     await mjpeg.start({ directory })
@@ -9,9 +10,26 @@ async function watchStream() {
     console.log('video stream errored', err);
   }
 
-  console.log('Restart in 1s');
+  console.log('Video - restart in 1s');
   await sleep(1000);
-  watchStream();
+  watchVideo();
 }
 
-watchStream();
+async function watchAudio() {
+  try {
+    await audio.start();
+  } catch(err) {
+    console.log('audio stream errored', err);
+  }
+  console.log('Audio - restart in 1s');
+  await sleep(1000);
+  watchAudio();
+}
+
+watchAudio();
+watchVideo();
+
+process.on('SIGINT', function () {
+  video.stop();
+  audio.stop();
+});
