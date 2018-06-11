@@ -16,6 +16,7 @@ async function watchVideo() {
   }
 
   console.log('Video - restart in 1s');
+  video.stop();
   await sleep(1000);
   watchVideo();
 }
@@ -31,6 +32,7 @@ async function watchAudio() {
     console.log('audio stream errored', err);
   }
   console.log('Audio - restart in 1s');
+  audio.stop();
   await sleep(1000);
   watchAudio();
 }

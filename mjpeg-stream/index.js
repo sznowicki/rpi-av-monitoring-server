@@ -6,6 +6,7 @@ function start({ directory }) {
       `${directory}/mjpg_streamer -o "output_http.so -w ./www" -i "input_raspicam.so"`,
       {
         cwd: directory,
+        uid: 1000,
       },
       (error, stdout, stderr) => {
         if (error) {

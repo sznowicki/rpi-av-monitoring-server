@@ -3,7 +3,10 @@ const { exec } = require('child_process');
 function start() {
   return new Promise((resolve, reject) => {
     exec(
-      `darkice -c ~/.darkice-s2ip.cfg`,
+      `darkice -c ~/.darkice-s2ip.cfg -v 0`,
+      {
+        uid: 1000,
+      },
       (error, stdout, stderr) => {
         if (error) {
           console.log('ERROR', error);
