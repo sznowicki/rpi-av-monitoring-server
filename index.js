@@ -1,8 +1,8 @@
 const video = require('./video');
 const audio = require('./audio');
 const sleep = require('./helpers/sleep');
-const led = require('./drivers/google/led');
-const button = require('./drivers/google/button');
+const led = require('./dev/led');
+const button = require('./dev/button');
 
 let killing = false;
 async function watchVideo() {
@@ -41,21 +41,17 @@ async function watchAudio() {
   watchAudio();
 }
 
-led.on().setBrightness(0.01);
+
 watchAudio();
 watchVideo();
+button();
+led.start();
 
 process.on('SIGINT', function () {
   killing = true;
   video.stop();
   audio.stop();
-  led.off();
-});
-
-let restartTimeout;
-button.on('main', 'interrupt', () => {
-  console.warn('Interrupt, stopping the audio.');
-  clearTimeout(restartTimeout);
-  audio.stop();
-  setTimeout(() => watchAudio(), 5000);
+  led.stop();
+  console.log('exiting in 3');
+  setTimeout(() => process.exit(), 3000);
 });

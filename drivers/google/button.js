@@ -8,8 +8,8 @@ class Button {
       edge: Gpio.EITHER_EDGE
     });
 
-    this.button.pwmFrequency(50);
-    console.log(this.button.getPwmFrequency());
+    this.button.pwmFrequency(800);
+    console.log('Frequency is:', this.button.getPwmFrequency());
 
     this.events = {
       interrupt: {},
@@ -17,15 +17,32 @@ class Button {
       press: {}
     };
 
+    this.lastPullDown = 0;
+
     this.listen();
   }
 
   listen() {
-    this.button.on('interrupt', function (level) {
-      Object.keys(this.events.interrupt).forEach((ns) => {
-        this.events.interrupt[ns].forEach(cb => cb())
-      });
+    this.button.on('interrupt', (level) => {
+      this.trigger('interrupt', { level });
+      if (level === 0) {
+        this.lastPullDown = Date.now();
+      } else {
+        const secondsFromLastPullDown = Math.round((Date.now() - this.lastPullDown) / 1000);
+        if (secondsFromLastPullDown > 5) {
+          this.trigger('longPress');
+        } else {
+          this.trigger('press');
+        }
+      }
+
       console.log('interrupt', level);
+    });
+  }
+
+  trigger(event, { level } = {}) {
+    Object.keys(this.events[event]).forEach((ns) => {
+      this.events[event][ns].forEach(cb => cb({ level }))
     });
   }
 
