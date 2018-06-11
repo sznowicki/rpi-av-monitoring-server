@@ -1,26 +1,31 @@
-const Gpio = require('onoff').Gpio;
+const Gpio = require('pigpio').Gpio;
 
 class Led {
- get constants() {
-   return {
-     OFF: 0,
-     ON: 1,
-     BLINK: 2,
-     BLINK_3: 3,
-     BEACON: 4,
-     BEACON_DARK: 5,
-     DECAY: 6,
-     PULSE_SLOW: 7,
-     PULSE_QUICK: 8,
-   }
- }
-
  constructor() {
-   this.led1 = new Gpio(13);
-   this.led2 = new Gpio(14)
+   this.led = new Gpio(25, { mode: Gpio.OUTPUT});
  }
 
- set() {
-   this.led1.writeSync(1);
+ on() {
+   this.led.digitalWrite(1);
+   return this;
  }
+
+ off() {
+   this.led.digitalWrite(0);
+
+   return this;
+ }
+
+ setBrightness(level) {
+   this.led.pwmWrite(Math.floor(255 * level));
+
+   return this;
+ }
+
+ getBrightness() {
+   return this.led.getPwmDutyCycle();
+ }
+
 }
+
+module.exports = new Led();

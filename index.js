@@ -1,9 +1,12 @@
 const video = require('./video');
 const audio = require('./audio');
 const sleep = require('./helpers/sleep');
+const led = require('./drivers/google/led');
+const button = require('./drivers/google/button');
 
 let killing = false;
 async function watchVideo() {
+  console.log('Video starts')
   try {
     const directory = '/home/pi/stream/mjpg-streamer/mjpg-streamer-experimental';
     await video.start({ directory })
@@ -22,6 +25,7 @@ async function watchVideo() {
 }
 
 async function watchAudio() {
+  console.log('Audio starts');
   try {
     await audio.start();
   } catch(err) {
@@ -37,6 +41,7 @@ async function watchAudio() {
   watchAudio();
 }
 
+led.on().setBrightness(0.01);
 watchAudio();
 watchVideo();
 
@@ -44,4 +49,13 @@ process.on('SIGINT', function () {
   killing = true;
   video.stop();
   audio.stop();
+  led.off();
+});
+
+let restartTimeout;
+button.on('main', 'interrupt', () => {
+  console.warn('Interrupt, stopping the audio.');
+  clearTimeout(restartTimeout);
+  audio.stop();
+  setTimeout(() => watchAudio(), 5000);
 });
