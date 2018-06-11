@@ -29,7 +29,7 @@ function start({ directory }) {
 }
 
 function stop() {
-  exec('killall mjpg_streamer');
+  exec('sudo killall mjpg_streamer');
 }
 
 module.exports = {

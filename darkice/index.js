@@ -26,7 +26,7 @@ function start() {
 }
 
 function stop() {
-  exec('killall darkice');
+  exec('sudo killall darkice');
 }
 module.exports = {
   start,

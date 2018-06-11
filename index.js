@@ -1,12 +1,17 @@
-const mjpeg = require('./mjpeg-stream');
+const video = require('./mjpeg-stream');
 const audio = require('./darkice');
 const sleep = require('./helpers/sleep');
 
+let killing = false;
 async function watchVideo() {
   try {
     const directory = '/home/pi/stream/mjpg-streamer/mjpg-streamer-experimental';
-    await mjpeg.start({ directory })
+    await video.start({ directory })
   } catch (err) {
+    if (killing) {
+      console.log('Exiting video');
+      return;
+    }
     console.log('video stream errored', err);
   }
 
@@ -19,6 +24,10 @@ async function watchAudio() {
   try {
     await audio.start();
   } catch(err) {
+    if (killing) {
+      console.log('Exiting audio');
+      return;
+    }
     console.log('audio stream errored', err);
   }
   console.log('Audio - restart in 1s');
@@ -30,6 +39,7 @@ watchAudio();
 watchVideo();
 
 process.on('SIGINT', function () {
+  killing = true;
   video.stop();
   audio.stop();
 });
