@@ -1,5 +1,5 @@
-const video = require('./mjpeg-stream');
-const audio = require('./darkice');
+const video = require('./video');
+const audio = require('./audio');
 const sleep = require('./helpers/sleep');
 
 let killing = false;

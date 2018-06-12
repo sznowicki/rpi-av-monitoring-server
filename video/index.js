@@ -1,10 +1,12 @@
 const { exec } = require('child_process');
+const { config, getExec }= require('../helpers/config');
 
-function start() {
+function start({ directory }) {
   return new Promise((resolve, reject) => {
     exec(
-      `darkice -c ~/.darkice-s2ip.cfg -v 0`,
+      getExec('video'),
       {
+        cwd: config.video.cwd,
         uid: 1000,
       },
       (error, stdout, stderr) => {
@@ -25,13 +27,14 @@ function start() {
         return resolve(stdout);
       }
     )
-  });
+  })
 }
 
 function stop() {
-  exec('sudo killall darkice');
+  exec(`sudo killall ${config.video.processName}`);
 }
+
 module.exports = {
   start,
-  stop
+  stop,
 };

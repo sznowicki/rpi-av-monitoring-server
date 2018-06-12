@@ -1,13 +1,10 @@
 const { exec } = require('child_process');
+const { config, getExec} = require('../helpers/config');
 
-function start({ directory }) {
+function start() {
   return new Promise((resolve, reject) => {
     exec(
-      `${directory}/mjpg_streamer -o "output_http.so -w ./www" -i "input_raspicam.so"`,
-      {
-        cwd: directory,
-        uid: 1000,
-      },
+      getExec('audio'),
       (error, stdout, stderr) => {
         if (error) {
           console.log('ERROR', error);
@@ -26,14 +23,14 @@ function start({ directory }) {
         return resolve(stdout);
       }
     )
-  })
+  });
 }
 
 function stop() {
-  exec('sudo killall mjpg_streamer');
+  exec(`sudo killall ${config.audio.processName}`);
 }
 
 module.exports = {
   start,
-  stop,
+  stop
 };

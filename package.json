@@ -1,14 +1,19 @@
 {
   "name": "rpms",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Raspberry Pi Monitoring Server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "cover": "jest --coverage",
+    "makeConfig": "cp default-config.json config.json"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
     "pigpio": "^1.1.0"
+  },
+  "devDependencies": {
+    "jest": "^23.1.0"
   }
 }

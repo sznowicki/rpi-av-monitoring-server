@@ -1,0 +1,19 @@
+{
+  "audio": {
+    "processName": "darkice",
+    "exec": "darkice",
+    "atts": {
+      "-c": "~/.darkice-s2ip.cfg",
+      "-v": "0"
+    }
+  },
+  "video": {
+    "processName": "mjpg_streamer",
+    "exec": "/home/pi/stream/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer",
+    "cwd": "/home/pi/stream/mjpg-streamer/mjpg-streamer-experimental/",
+    "atts": {
+      "-o": "\"output_http.so -w ./www\"",
+      "-i": "\"input_raspicam.so\""
+    }
+  }
+}
