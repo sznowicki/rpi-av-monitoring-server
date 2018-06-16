@@ -6,8 +6,7 @@ function start({ directory }) {
     exec(
       getExec('video'),
       {
-        cwd: config.video.cwd,
-        uid: 1000,
+        cwd: config.video.cwd
       },
       (error, stdout, stderr) => {
         if (error) {
