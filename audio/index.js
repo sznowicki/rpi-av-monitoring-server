@@ -5,6 +5,9 @@ function start() {
   return new Promise((resolve, reject) => {
     exec(
       getExec('audio'),
+      {
+        uid: 1000,
+      },
       (error, stdout, stderr) => {
         if (error) {
           console.log('ERROR', error);
