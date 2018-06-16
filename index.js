@@ -45,7 +45,7 @@ async function watchAudio() {
 
 watchAudio();
 watchVideo();
-button();
+button.start();
 led.start();
 
 process.on('SIGINT', function () {
@@ -53,6 +53,7 @@ process.on('SIGINT', function () {
   video.stop();
   audio.stop();
   led.stop();
+  button.stop();
   console.log('exiting in 3');
   setTimeout(() => process.exit(), 3000);
 });

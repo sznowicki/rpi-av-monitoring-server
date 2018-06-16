@@ -6,11 +6,11 @@ const DEFAULT_BRIGHTNESS = 0.01;
 class Led {
   constructor() {
     this.led = new Gpio(25, { mode: Gpio.OUTPUT });
-    this.setBrightness(0.01);
   }
 
   on() {
     this.led.digitalWrite(1);
+    this.setBrightness(0.01);
     return this;
   }
 
@@ -21,7 +21,14 @@ class Led {
   }
 
   setBrightness(level) {
-    this.led.pwmWrite(Math.floor(255 * level));
+    const sanitizedLevel = Math.round(level * 100) / 100;
+    let value = 255 * sanitizedLevel;
+    if (value > 255) {
+      value = 255;
+    } else if (value < 0) {
+      value = 0;
+    }
+    this.led.pwmWrite(Math.floor(value));
 
     return this;
   }
@@ -38,18 +45,21 @@ class Led {
   }
 
   async pulse(times) {
-    for (let i; i < times; i++) {
-      let level = 0.01;
-      while(level >= 1) {
+    const sleepTime = 35;
+    for (let i = 0; i < times; i++) {
+      console.time(i);
+      let level = 0.1;
+      while(level <= 1) {
         this.setBrightness(level);
-        level += 0.01;
-        await sleep(1);
+        level += 0.1;
+        await sleep(sleepTime);
       }
-      while(level <= 0.01) {
+      while(level >= 0.1) {
         this.setBrightness(level);
-        level -= 0.01;
-        await sleep(1);
+        level -= 0.1;
+        await sleep(sleepTime);
       }
+      console.timeEnd(i);
     }
     this.resetBrightness();
   }

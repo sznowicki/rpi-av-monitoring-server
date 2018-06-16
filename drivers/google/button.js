@@ -18,25 +18,35 @@ class Button {
     };
 
     this.lastPullDown = 0;
-
+    this.longPressTimeout = 0;
     this.listen();
+  }
+
+  scheduleLongPress() {
+    this.longPressTimeout = setTimeout(() => {
+      this.trigger('longPress');
+    }, 5000);
+  }
+
+  clearLongPress() {
+    clearTimeout(this.longPressTimeout);
   }
 
   listen() {
     this.button.on('interrupt', (level) => {
+      console.log('interrupt', level);
       this.trigger('interrupt', { level });
       if (level === 0) {
+        this.clearLongPress();
+        this.scheduleLongPress();
         this.lastPullDown = Date.now();
       } else {
+        this.clearLongPress();
         const secondsFromLastPullDown = Math.round((Date.now() - this.lastPullDown) / 1000);
-        if (secondsFromLastPullDown > 5) {
-          this.trigger('longPress');
-        } else {
+        if (secondsFromLastPullDown < 5) {
           this.trigger('press');
         }
       }
-
-      console.log('interrupt', level);
     });
   }
 

@@ -4,11 +4,8 @@ const led = require('../drivers/google/led');
 let shutdownConfirmMode = false;
 let shuttingDownPendingTimeout;
 function start() {
-  button.on('buttonController', 'interrupt', () => {
-    console.warn('Interrupt');
-  });
-
   button.on('buttonController', 'press', () => {
+    console.log('press');
     if (shutdownConfirmMode) {
       console.log('Shutting down, scheduled by user.');
     }
@@ -17,13 +14,19 @@ function start() {
   });
 
   button.on('buttonController', 'longPress', async () => {
+    console.log('longPress');
     clearTimeout(shuttingDownPendingTimeout);
     shutdownConfirmMode = true;
-    led.pulse(5);
-    shuttingDownPendingTimeout = setTimeout(() => {
-      shutdownConfirmMode = false;
-    }, 5000);
+    await led.pulse(5);
+    shutdownConfirmMode = false;
   });
 }
 
-module.exports = start;
+function stop() {
+  button.off('buttonController');
+}
+
+module.exports = {
+  start,
+  stop,
+};
