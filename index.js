@@ -15,9 +15,9 @@ async function watchVideo() {
     console.log('video stream errored', err);
   }
 
-  console.log('Video - restart in 1s');
+  console.log('Video - restart in 5s');
   video.stop();
-  await sleep(1000);
+  await sleep(5000);
   watchVideo();
 }
 
