@@ -1,4 +1,4 @@
-const Gpio = require('pigpio').Gpio;
+const { Gpio } = require('../gpio');
 
 class Button {
   constructor() {

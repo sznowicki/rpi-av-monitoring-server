@@ -1,5 +1,6 @@
-const Gpio = require('pigpio').Gpio;
+const { Gpio } = require('../gpio');
 const sleep = require('../../helpers/sleep');
+
 
 const DEFAULT_BRIGHTNESS = 0.01;
 
